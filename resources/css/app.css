@@ -1,0 +1,369 @@
+@import "tailwindcss";
+@import './legacy/bootstrap-compat.css';
+@import './erp-surface.css';
+
+/*
+| Harbor design tokens.
+|
+| Lifted verbatim from the inline <style> blocks in the Livewire blades
+| (Admin/Account/list, Admin/Investor/list, Admin/Merchant/list + create,
+| Merchant/PendingInvestment) so the Vue port is a pixel match rather than a
+| reinterpretation. Panel hues derive from the title band, now #cc1f1f.
+|
+| Those blades keep their own copies until each module is cut over; this file
+| is the single source of truth from here on.
+|
+| The chrome was retinted from the Themesdesign navy #3051d3 to the sign-in
+| screen's red (#cc1f1f / #b70000), so the signed-in app and the signed-out one
+| are the same product. The tokens that carry it were renamed `hb-navy*` ->
+| `hb-brand*` in the same pass: they name a role, not a hue, so the next retint
+| cannot leave the vocabulary lying about what colour the app is. The neutrals
+| lost their blue cast at the same time, so nothing reads cool beside the red.
+*/
+:root { --hb-hero-grad: linear-gradient(118deg, #a81919 0%, #cc1f1f 42%, #e03a3a 100%); }
+
+/* The height every table shell stands at. */
+:root { --hb-table-h: 440px; }
+
+@theme {
+    --color-hb-brand: #cc1f1f;
+    --color-hb-brand-2: #b70000;
+    --color-hb-brand-3: #9e0000;
+    --color-hb-line-d: #d94b4b;
+    --color-hb-ink: #262a33;
+    --color-hb-mut: #8a8894;
+    --color-hb-line: #e4e0e2;
+    --color-hb-row: #f2eff0;
+    --color-hb-hover: #faf8f9;
+    --color-hb-sel: #fdf1f1;
+    --color-hb-red: #d63c2e;
+    --color-hb-green: #2f7d46;
+
+    /* panel chrome */
+    --color-hb-ic: #c22626;
+    --color-hb-ic-line: #e06060;
+    --color-hb-eyebrow: #f6c3c3;
+
+    /* status dots */
+    --color-hb-dot-g: #7ac943;
+    --color-hb-dot-r: #f0604d;
+    --color-hb-dot-o: #f5a623;
+    --color-hb-dot-b: #4aa3e8;
+
+    --radius-hb-panel: 14px;
+    --radius-hb-sheet: 16px;
+    --radius-hb-ctl: 9px;
+    --radius-hb-btn: 10px;
+
+    --shadow-hb-panel: 0 10px 30px rgba(52, 20, 20, 0.22);
+    --shadow-hb-sheet: 0 10px 32px rgba(52, 20, 20, 0.10);
+    --shadow-hb-focus: 0 0 0 3px rgba(204, 31, 31, 0.15);
+
+    /* the blades run a compact density: 13.5px body, 10.5px uppercase labels */
+    --text-hb-body: 13.5px;
+    --text-hb-sm: 12px;
+    --text-hb-lbl: 10.5px;
+
+    /*
+    | Template chrome — measured from assets/css/app.min.css rather than chosen.
+    |   #page-topbar   height 70px, background (was #3051d3, now #cc1f1f)
+    |   .vertical-menu width 250px, white, top 70px, shadow 0 2px 4px rgba(0,0,0,.08)
+    |   #sidebar-menu ul li a       padding .7rem 1.5rem, 15px, #7c8a96
+    |   #sidebar-menu .sub-menu li a padding .4rem 1.5rem .4rem 3.7rem, 13.5px
+    */
+    /*
+     * Bootstrap 4's `lg`, which is the breakpoint the whole template is built on:
+     * `col-lg-*` in the blades, `.vertical-menu`'s media queries, and the menu
+     * button's own `$(window).width() >= 992` test. Tailwind defaults `lg` to
+     * 1024px, which left a 32px band where the chrome disagreed with itself.
+     */
+    --breakpoint-lg: 992px;
+
+    --spacing-topbar: 70px;
+    --spacing-sidebar: 250px;
+    --color-nav-link: #88807f;
+    --color-nav-link-hover: #3c3839;
+    --color-header-item: #f4e6e6;
+    --shadow-chrome: 0 2px 4px rgba(0, 0, 0, 0.08);
+
+    /* The template's typeface, declared the same way app.min.css declares it. */
+    --font-sans: Nunito, sans-serif;
+}
+
+@layer base {
+    html {
+        scrollbar-gutter: stable;
+    }
+
+    body {
+        color: var(--color-hb-ink);
+        font-size: var(--text-hb-body);
+        font-family: var(--font-sans);
+    }
+
+    /* Numeric columns line up only with tabular figures — the blades rely on this. */
+    .tabular {
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+@layer components {
+    /* Sidebar icons: one glyph column wide, taking the colour of the row they sit in. */
+    .nav-icon {
+        display: inline-flex;
+        flex: none;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        font-size: 19px;
+        line-height: 1;
+        color: #a39ba0;
+        transition: color .15s;
+    }
+
+    .nav-row:hover .nav-icon { color: #7a6f74; }
+    .nav-row.is-on .nav-icon { color: var(--color-hb-brand); }
+
+    /*
+     * The rows of the sidebar. Pills rather than the template's flat rows: the
+     * current screen is a filled shape you find without reading, and a section's
+     * children hang off one rule so the tree is visible at a glance.
+     */
+    .nav-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        border-radius: 10px;
+        padding: 9px 11px;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.25;
+        color: #5f5a63;
+        text-align: left;
+        transition: background-color .15s, color .15s;
+    }
+
+    .nav-row:hover { background: #f7f3f4; color: var(--color-hb-ink); }
+    .nav-row.is-on { background: #fceeee; color: var(--color-hb-brand); }
+    .nav-row .nav-caret { margin-left: auto; font-size: 16px; color: #bcb2b6; transition: transform .2s; }
+    .nav-row.is-open .nav-caret { transform: rotate(180deg); }
+    .nav-out { font-size: 11px; opacity: 0; transition: opacity .15s; }
+    .nav-sub-row:hover .nav-out { opacity: .55; }
+
+    /* The children hang off a single hairline, indented under their section's icon. */
+    .nav-sub {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        margin: 2px 0 6px 21px;
+        padding-left: 10px;
+        border-left: 1px solid var(--color-hb-line);
+    }
+
+    .nav-sub-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 8px;
+        padding: 6px 10px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #88807f;
+        transition: background-color .15s, color .15s;
+    }
+
+    .nav-sub-row:hover { background: #f7f3f4; color: var(--color-hb-ink); }
+    .nav-sub-row.is-on { background: #fceeee; color: var(--color-hb-brand); }
+
+    /* Child rows carry a small glyph that inherits the row's state colours. */
+    .nav-sub-icon {
+        display: inline-flex;
+        flex: none;
+        align-items: center;
+        justify-content: center;
+        width: 17px;
+        font-size: 14px;
+        line-height: 1;
+    }
+
+}
+
+/*
+ * The collapsed sidebar rail, mirroring `.vertical-collpsed` in app.min.css.
+ *
+ * The topbar's backburger button toggles this. Legacy binds it in app.js:
+ *   $("#vertical-menu-btn").on("click", function () {
+ *       $("body").toggleClass("sidebar-enable");
+ *       if ($(window).width() >= 992) $("body").toggleClass("vertical-collpsed");
+ *       else $("body").removeClass("vertical-collpsed");
+ *   });
+ * — so above 992px it collapses the menu to a 70px rail, and below that it opens
+ * and closes the drawer instead. Written as CSS rather than conditional utility
+ * classes because the rail is a dozen coupled rules, including a hover fly-out
+ * that has to escape the sidebar's own scroll box.
+ *
+ * 992px, not Tailwind's 1024px `lg`: the template is Bootstrap 4 and this is its
+ * `lg` breakpoint, which is what the legacy handler tests against.
+ */
+@media (min-width: 992px) {
+    .nav-collapsed [data-brand],
+    .nav-collapsed [data-sidebar] {
+        width: 70px;
+    }
+
+    .nav-collapsed [data-main] {
+        padding-left: 70px;
+    }
+
+    /* The fly-out has to leave the sidebar, so it can no longer be the scroller. */
+    .nav-collapsed [data-sidebar] {
+        overflow: visible;
+    }
+
+    .nav-collapsed [data-nav-item] {
+        position: relative;
+        white-space: nowrap;
+    }
+
+    /*
+     * 26px, not the template's 20px: it padded a 28px icon column, which put the
+     * glyph in the middle of the 70px rail. The column is 18px now, so the padding
+     * carries the difference — 26 + 18 + 26 = 70.
+     */
+    .nav-collapsed [data-nav-link] {
+        justify-content: center;
+        min-height: 44px;
+        padding: 11px;
+        transition: none;
+    }
+
+    .nav-collapsed [data-nav-label],
+    .nav-collapsed [data-nav-arrow],
+    .nav-collapsed [data-nav-sub] {
+        display: none;
+    }
+
+    /* Hovering a rail item slides its label out over the page. */
+    .nav-collapsed [data-nav-item]:hover > [data-nav-link] {
+        position: relative;
+        z-index: 6;
+        justify-content: flex-start;
+        width: calc(190px + 70px);
+        border-radius: 10px 0 0 10px;
+        background-color: #fceeee;
+        color: #cc1f1f;
+        transition: none;
+    }
+
+    /*
+     * The label reappears as a flex item, so the row's own gap already spaces it off
+     * the icon — the 25px the template padded it by would land on top of that.
+     */
+    .nav-collapsed [data-nav-item]:hover > [data-nav-link] [data-nav-label] {
+        display: inline;
+        padding-left: 14px;
+    }
+
+    .nav-collapsed [data-nav-item]:hover > [data-nav-sub] {
+        /*
+         * v-show writes `display: none` inline when a section is closed, and an
+         * inline style beats a stylesheet rule — so the fly-out needs !important
+         * to appear at all. The rest of the rail overrides Tailwind utilities
+         * simply by being unlayered, which outranks anything in @layer.
+         */
+        display: block !important;
+        position: absolute;
+        left: 70px;
+        width: 190px;
+        padding: 5px 0;
+        z-index: 9999;
+        margin: 0;
+        border: 1px solid var(--color-hb-line);
+        border-radius: 0 10px 10px 0;
+        background-color: #fff;
+        box-shadow: 3px 5px 14px 0 rgba(54, 61, 71, 0.12);
+    }
+
+    .nav-collapsed [data-nav-item]:hover > [data-nav-sub] a {
+        width: 190px;
+        border-radius: 8px;
+        padding: 7px 12px;
+    }
+}
+
+/*
+ * Every screen's <select> skin is a class the trigger keeps wearing, so the skins
+ * dress it unchanged — except for the caret they draw as a background image, which
+ * would sit behind the chevron the trigger draws itself.
+ */
+.hbs-trigger { background-image: none !important; }
+
+/*
+ * A native filter sized itself to its widest option; a button sizes itself to the
+ * one that is chosen, so the toolbar filters are held to a readable width. The
+ * numeric pickers — rows per page, a fee count, a rate — are left to shrink.
+ */
+.hbs-trigger.hbq-select,
+.hbs-trigger.hba-select,
+.hbs-trigger.hbl-select,
+.hbs-trigger.hb-sc-select { min-width: 132px; }
+
+/*
+ * The searchable picker (HbSelect) standing in for a <select> inside a .hb-selwrap:
+ * the six list stylesheets dress that wrapper identically, so the trigger is dressed
+ * once here rather than six times over. It draws its own caret.
+ */
+.hb-selwrap .hbs-trigger {
+    width: 100%;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-hb-ink);
+    background: #fff;
+    border: 1px solid var(--color-hb-line);
+    border-radius: 9px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.hb-selwrap:has(.hbs-trigger)::after { content: none; }
+
+.hb-selwrap .hbs-trigger.is-open,
+.hb-selwrap .hbs-trigger:focus-visible {
+    outline: none;
+    border-color: var(--color-hb-brand);
+    box-shadow: var(--shadow-hb-focus);
+}
+
+/*
+ * Page transition (AdminLayout's RouterView). Leaving is quicker than arriving so
+ * the pair reads as the new page pushing the old one out rather than a crossfade
+ * with a hole in the middle; the 6px lift gives the eye a direction to follow.
+ * Nothing moves for someone who has asked the OS for less motion.
+ */
+.page-enter-active { transition: opacity .18s ease-out, transform .18s ease-out; }
+.page-leave-active { transition: opacity .09s ease-in, transform .09s ease-in; }
+
+.page-enter-from { opacity: 0; transform: translateY(6px); }
+.page-leave-to { opacity: 0; transform: translateY(-4px); }
+
+@media (prefers-reduced-motion: reduce) {
+    .page-enter-active,
+    .page-leave-active { transition: opacity .01s linear; }
+
+    .page-enter-from,
+    .page-leave-to { transform: none; }
+}
+
+/* The sheet grid keeps the ledger's fixed height; the head sticks as rows scroll. */
+.hb-sheet .hb-scroller {
+    height: var(--hb-table-h, 440px);
+    overflow-y: auto;
+}
+
+.hb-sheet .hb-scroller .hb-grid thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #fff;
+}

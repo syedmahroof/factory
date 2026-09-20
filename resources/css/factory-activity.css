@@ -1,0 +1,574 @@
+/*
+| Factory activity — the dashboard's stylesheet.
+|
+| The layout is ip_new's Portfolio Activity screen (resources/css/portfolio-activity.css
+| over there): the same card head, the same mix rows, the same tile grid, the same
+| closing footer band. What is *not* carried over is its palette — every colour and
+| radius here reads from the tokens in app.css, so the dashboard follows the brand
+| rather than keeping a second copy of it.
+|
+| Only the vocabulary the dashboard actually adds lives here. The card shell, the
+| tables, the buttons and the status pills are erp-surface.css's `.card`,
+| `.data-table`, `.btn*` and `.hb-pill` — a dashboard-shaped duplicate of those
+| would drift from the sixty screens behind it.
+|
+| The prefix is `dash-`, not the `fa-` that "factory activity" would suggest:
+| app.blade.php loads assets/css/icons.min.css, whose Font Awesome half claims
+| `.fa` and every `.fa-*` name in the sheet. `.fa` alone sets
+| `font-family: 'Font Awesome 5 Free'; font-weight: 900; line-height: 1;
+| display: inline-block` — which silently repainted this entire screen in the icon
+| font and flattened its leading. Do not rename these back.
+*/
+
+.dash {
+    --dash-pn2: #fbf9fa;
+    --dash-ln2: #f0ecee;
+
+    /*
+    | The mix palette, read as a progression rather than as a set of labels.
+    |
+    | A status bar answers "how far along is this?", so the colours run in that
+    | order — grey while nothing has happened, blue once it is agreed, brand red
+    | while it is being worked, earth through the part-done middle, green when it
+    | is finished — and cancelled steps out of the run entirely into plum. That is
+    | why a card showing one status still reads correctly: the swatch says which
+    | end of the lifecycle it sits at, not merely which row it happens to be.
+    |
+    | All ten stay apart from one another at a 9px swatch, and none of the greens
+    | or blues fight the brand red beside them.
+    */
+    --dash-grey: #a3a0a6;
+    --dash-blue: #2f6ea8;
+    --dash-brand: var(--color-hb-brand);
+    --dash-brand-deep: #9e0000;
+    --dash-ochre: #b4571f;
+    --dash-olive: #8a6d2f;
+    --dash-green: #4c8a2f;
+    --dash-green-deep: #2f7d46;
+    --dash-teal: #2f7d7d;
+    --dash-plum: #6b5b95;
+
+    color: var(--color-hb-ink);
+    font-size: var(--text-hb-body);
+    /* Figures line up in a column only with tabular figures; 1.5 is the leading
+       the card measurements were taken at. */
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+}
+
+.dash .good { color: var(--color-hb-green); }
+.dash .bad { color: var(--color-hb-red); }
+.dash .hint { font-size: var(--text-hb-sm); color: var(--color-hb-mut); }
+
+/*
+| ── Band controls ──
+|
+| The period buttons ride in <page-header>'s action slot, which the layout pulls
+| up onto the brand title band — so they are dressed for a coloured ground, the
+| way the toolbar's primary button already is.
+*/
+
+/* Presets never wrap: on a narrow screen the group scrolls sideways instead. */
+.dash .dash-presets {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, .22);
+    border-radius: var(--radius-hb-btn);
+    background: rgba(255, 255, 255, .12);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.dash .dash-presets::-webkit-scrollbar { display: none; }
+
+.dash .dash-presets button {
+    flex: 0 0 auto;
+    padding: 5px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    font-size: var(--text-hb-sm);
+    font-weight: 650;
+    color: rgba(255, 255, 255, .82);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color .12s ease, background .12s ease;
+}
+
+.dash .dash-presets button:hover { background: rgba(255, 255, 255, .16); color: #fff; }
+.dash .dash-presets button.on { background: #fff; color: var(--color-hb-brand-2); }
+
+.dash .dash-dates {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dash .dash-dates .hint { color: rgba(255, 255, 255, .72); }
+
+.dash .dash-dates input {
+    width: auto;
+    min-width: 0;
+    padding: 5px 10px;
+    border: 1px solid rgba(255, 255, 255, .24);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .12);
+    font-size: var(--text-hb-sm);
+    font-weight: 600;
+    color: #fff;
+    color-scheme: dark;
+}
+
+.dash .dash-dates input:focus {
+    border-color: #fff;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, .18);
+}
+
+/* The compared-with line hangs off the range chip rather than beside it. */
+.dash .dash-range {
+    display: flex;
+    align-items: center;
+    gap: 4px 10px;
+    flex-wrap: wrap;
+    font-size: var(--text-hb-sm);
+    color: rgba(255, 255, 255, .95);
+}
+
+.dash .dash-range .cmp { font-size: 11.5px; color: rgba(255, 255, 255, .7); }
+
+@media (max-width: 560px) {
+    .dash .dash-dates { width: 100%; }
+    .dash .dash-dates input { flex: 1; }
+}
+
+/*
+| A segmented switch, not four buttons in a box: the group is an inset track and
+| the chosen bucket is the one raised tile on it, so the control reads at a glance
+| without a border heavy enough to compete with the card's own.
+*/
+.dash .dash-mini {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: var(--radius-hb-ctl);
+    background: var(--dash-ln2);
+}
+
+.dash .dash-mini button {
+    padding: 4px 11px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    font-size: 11.5px;
+    font-weight: 650;
+    color: var(--color-hb-ink);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color .12s ease, background .12s ease;
+}
+
+.dash .dash-mini button:hover { background: rgba(255, 255, 255, .75); color: var(--color-hb-brand); }
+.dash .dash-mini button.on { background: var(--color-hb-brand); color: #fff; }
+.dash .dash-mini button.on:hover { color: #fff; }
+
+/* ── Cards ── */
+
+/* A column, so a card that runs short still closes on its own bottom edge. */
+.dash .dash-card {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+    min-width: 0;
+}
+
+/* The head closes on a hairline, so the title reads as a header rather than as
+   text floating above the figures. Every card's head is the same height. */
+.dash .dash-ch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    /* Three cards side by side have to start their bodies on the same line, so
+       the head is held to one height rather than sized by its own wording. */
+    min-height: 58px;
+    padding: 11px 17px;
+    border-bottom: 1px solid var(--dash-ln2);
+}
+
+.dash .dash-ch .t {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -.012em;
+}
+
+.dash .dash-ch .s2 {
+    margin-top: 2px;
+    font-size: 11.8px;
+    color: var(--color-hb-mut);
+}
+
+/*
+| Every card head ends in a link to the screen behind it. Set as a soft chip
+| rather than bare coloured text, it stops reading as a stray word beside a
+| control and gives the heads one shape in common.
+*/
+.dash .dash-ch a {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 11px;
+    border: 1px solid #f3d3d3;
+    border-radius: 8px;
+    background: #fceeee;
+    font-size: 11.8px;
+    font-weight: 650;
+    color: var(--color-hb-brand);
+    white-space: nowrap;
+    transition: background .12s ease, color .12s ease;
+}
+
+.dash .dash-ch a:hover { background: var(--color-hb-brand); color: #fff; }
+
+/* The switch and the link are one cluster at the end of the head. */
+.dash .dash-chx {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dash .dash-cb {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 14px 17px 15px;
+}
+
+/* The chart is the whole body, so it sits in the middle of whatever height the
+   row's tallest card sets rather than hanging from the header. */
+.dash .dash-cb > svg { margin: auto 0; }
+
+.dash .dash-r1 { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 12px; margin-top: 12px; }
+.dash .dash-r2 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.dash .dash-r3 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 12px; margin-top: 12px; }
+
+@media (max-width: 1200px) {
+    .dash .dash-r1,
+    .dash .dash-r2,
+    .dash .dash-r3 { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ── The output chart ── */
+
+.dash svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+/* Axis and value type: the chart is drawn at 560 wide and displayed near double
+   that, so it carries lighter weights and wider tracking than page text would. */
+.dash .dash-axis text {
+    font-family: inherit;
+    letter-spacing: .04em;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Hovering the plot dims the other bars so the one under the cursor reads as
+   selected; its exact figure is in the bar's own title. */
+.dash .dash-bars rect {
+    cursor: pointer;
+    transition: opacity .13s ease, fill .13s ease;
+}
+
+.dash .dash-bars:hover rect { opacity: .32; }
+.dash .dash-bars rect:hover { opacity: 1; fill: var(--color-hb-brand-2); }
+
+/* ── Mix rows ── */
+
+.dash .dash-mix {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dash .dash-mix .r .t {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.dash .dash-mix .r .n {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    font-size: 12.6px;
+    font-weight: 650;
+}
+
+.dash .dash-mix .r .n i {
+    flex: 0 0 9px;
+    width: 9px;
+    height: 9px;
+    border-radius: 3px;
+}
+
+.dash .dash-mix .r .n small {
+    font-weight: 500;
+    color: var(--color-hb-mut);
+    white-space: nowrap;
+}
+
+.dash .dash-mix .r .v {
+    font-size: 12.8px;
+    font-weight: 750;
+    letter-spacing: -.01em;
+    white-space: nowrap;
+}
+
+.dash .dash-mix .r .tr {
+    height: 8px;
+    border-radius: 99px;
+    background: var(--dash-ln2);
+    overflow: hidden;
+}
+
+.dash .dash-mix .r .tr i {
+    display: block;
+    height: 100%;
+    border-radius: 99px;
+}
+
+/*
+| The closing line is a footer band flush to the card's base rather than a rule
+| drawn under the last bar: three cards side by side then end on one edge, and a
+| card with room to spare ends on a deliberate strip instead of ragged white.
+*/
+.dash .dash-split {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin: auto -17px -15px;
+    padding: 11px 17px;
+    border-top: 1px solid var(--dash-ln2);
+    border-radius: 0 0 var(--radius-hb-sheet) var(--radius-hb-sheet);
+    background: var(--dash-pn2);
+    font-size: 12.3px;
+    color: var(--color-hb-mut);
+}
+
+.dash .dash-split b { font-weight: 750; color: var(--color-hb-ink); }
+
+/* ── The factory right now ── */
+
+.dash .dash-tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.dash .dash-tiles .cell {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 13px 17px;
+    border-top: 1px solid var(--dash-ln2);
+    min-width: 0;
+    color: inherit;
+    transition: background .12s ease;
+}
+
+.dash .dash-tiles .cell:nth-child(-n + 2) { border-top: none; }
+.dash .dash-tiles .cell:nth-child(odd) { border-right: 1px solid var(--dash-ln2); }
+.dash .dash-tiles a.cell:hover { background: var(--dash-pn2); }
+.dash .dash-tiles a.cell:hover .num { color: var(--color-hb-brand); }
+
+.dash .dash-tiles .ic {
+    display: flex;
+    flex: 0 0 36px;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    font-size: 19px;
+}
+
+.dash .dash-tiles .ic.br { background: #fceeee; color: var(--color-hb-brand); }
+.dash .dash-tiles .ic.gn { background: #e9f5df; color: #4c8a2f; }
+.dash .dash-tiles .ic.bl { background: #e7f1fb; color: #2f6ea8; }
+.dash .dash-tiles .ic.am { background: #f3f0e6; color: #8a6d2f; }
+.dash .dash-tiles .ic.nt { background: #f6f4f5; color: #585460; }
+
+.dash .dash-tiles .num {
+    display: block;
+    font-size: 21px;
+    font-weight: 750;
+    letter-spacing: -.028em;
+    line-height: 1.15;
+}
+
+.dash .dash-tiles .lb {
+    display: block;
+    margin-top: 1px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-hb-mut);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dash .dash-statebar {
+    display: flex;
+    gap: 3px;
+    height: 8px;
+    margin: 13px 17px 0;
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.dash .dash-statebar i { display: block; height: 100%; }
+
+.dash .dash-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    padding: 11px 17px 15px;
+}
+
+.dash .dash-legend .item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: var(--text-hb-sm);
+    color: var(--color-hb-mut);
+    white-space: nowrap;
+}
+
+.dash .dash-legend .sw {
+    flex: 0 0 9px;
+    width: 9px;
+    height: 9px;
+    border-radius: 3px;
+}
+
+.dash .dash-legend b { font-weight: 750; color: var(--color-hb-ink); letter-spacing: -.01em; }
+
+/* ── Row lists (reorder shortfalls) ── */
+
+.dash .dash-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 17px;
+    border-top: 1px solid var(--dash-ln2);
+    font-size: 12.8px;
+}
+
+.dash .dash-row:first-of-type { border-top: none; }
+
+.dash .dash-row .who {
+    flex: 1;
+    min-width: 0;
+    font-weight: 650;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dash .dash-row .who small {
+    display: block;
+    font-weight: 500;
+    color: var(--color-hb-mut);
+    font-size: 11px;
+}
+
+.dash .dash-row .fig {
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--color-hb-ink);
+}
+
+.dash .dash-row .fig small { font-weight: 500; color: var(--color-hb-mut); }
+
+/* ── Attainment bar, in the table ── */
+
+.dash .dash-prog {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dash .dash-prog .tr {
+    width: 70px;
+    height: 6px;
+    border-radius: 99px;
+    background: var(--dash-ln2);
+    overflow: hidden;
+}
+
+.dash .dash-prog .tr i {
+    display: block;
+    height: 100%;
+    border-radius: 99px;
+    background: var(--color-hb-green);
+}
+
+.dash .dash-prog small {
+    min-width: 36px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-hb-mut);
+}
+
+/* Centred in whatever room the card has, rather than pinned under its header. */
+.dash .dash-empty {
+    margin: auto 0;
+    padding: 26px 17px;
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--color-hb-mut);
+}
+
+.dash .dash-foot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-size: var(--text-hb-sm);
+    color: var(--color-hb-mut);
+}
+
+.dash .dash-foot .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-hb-green);
+}
+
+/* Reloading swaps every figure at once, so the whole board dims rather than each
+   card growing its own spinner. */
+.dash .dash-dim { transition: opacity .15s; }
+.dash .dash-dim.is-loading { opacity: .45; pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    .dash .dash-presets button,
+    .dash .dash-mini button,
+    .dash .dash-ch a,
+    .dash .dash-tiles .cell,
+    .dash .dash-bars rect,
+    .dash .dash-dim { transition: none; }
+}
+
+@media print {
+    .dash .dash-presets,
+    .dash .dash-dates { display: none !important; }
+
+    .dash .dash-card { box-shadow: none; border: 1px solid var(--color-hb-line); }
+}

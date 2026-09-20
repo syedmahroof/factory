@@ -1,0 +1,174 @@
+/*
+| HbHero — the panel a screen opens with.
+|
+| Ported from ip_new's resources/css/hb-hero.css: same gradient card, avatar tile,
+| eyebrow, pill meta, lead gauge and stats band, at the same measurements. What is
+| not carried over is its palette — the navy literals are gone and every colour
+| reads from the tokens in app.css, so the panel follows the brand.
+|
+| Its class names are its own (`.hbh-*`) rather than the page's, so one edit here
+| reaches every screen that opens with the panel.
+|
+| The dots and the eyebrow were re-picked for a red ground rather than recoloured
+| mechanically: a red "bad" dot disappears into the gradient it sits on, so that
+| one is set light enough to read against it.
+*/
+.hbh {
+    --hbh-line: rgba(255, 255, 255, .17);
+    --hbh-dim: rgba(255, 255, 255, .9);
+    --hbh-cols: 6;
+
+    border-radius: var(--radius-hb-sheet);
+    overflow: hidden;
+    color: #fff;
+    background: var(--hb-hero-grad);
+    box-shadow: var(--shadow-hb-panel);
+    font-variant-numeric: tabular-nums;
+}
+
+.hbh-top { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 18px; padding: 15px 20px; }
+/* With a band below, the top block closes on the divider rather than on padding. */
+.hbh:has(.hbh-stats) .hbh-top { padding-bottom: 14px; }
+.hbh-main { flex: 1 1 460px; min-width: 0; }
+.hbh-id { display: flex; align-items: center; gap: 12px; }
+
+.hbh-av {
+    flex: none;
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    border-radius: 11px;
+    font-size: 18px;
+    background: rgba(255, 255, 255, .15);
+    border: 1px solid rgba(255, 255, 255, .22);
+}
+
+/* Initials read as a name, not as a glyph, so they are set smaller and tighter. */
+.hbh-av.mono { font-size: 15px; font-weight: 800; letter-spacing: .04em; }
+
+.hbh-eyebrow {
+    font-size: var(--text-hb-lbl); font-weight: 700;
+    letter-spacing: .16em; text-transform: uppercase;
+    color: var(--color-hb-eyebrow);
+}
+
+.hbh-name {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin: 1px 0 0;
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -.4px; line-height: 1.15;
+}
+
+.hbh-name a { color: #f8dada; font-size: 14px; }
+.hbh-name a:hover { color: #fff; }
+
+/* Whatever the screen puts under the name — chips, a status line — sits clear of it. */
+.hbh-meta { margin-top: 9px; font-size: 12.5px; color: var(--hbh-dim); }
+.hbh-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.hbh-acts.under { margin-top: 11px; }
+
+/* ── The lead figure ──────────────────────────────────────────────────────── */
+
+.hbh-gauge { flex: 0 0 250px; margin-left: auto; text-align: right; }
+
+.hbh-gauge-eyebrow {
+    font-size: var(--text-hb-lbl); font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--color-hb-eyebrow);
+}
+
+.hbh-gauge-val { font-size: 32px; font-weight: 800; line-height: 1.1; letter-spacing: -.8px; }
+.hbh-gauge-sub { font-size: 12.5px; color: rgba(255, 255, 255, .88); }
+.hbh-track { height: 6px; margin: 8px 0 5px; border-radius: 99px; background: rgba(255, 255, 255, .24); overflow: hidden; }
+.hbh-track i { display: block; height: 100%; border-radius: 99px; background: #fff; transition: width .4s ease; }
+.hbh-gauge-foot { font-size: 11.5px; color: rgba(255, 255, 255, .78); }
+
+/* ── The stats band ───────────────────────────────────────────────────────── */
+
+/*
+ * Part of the card, not a strip under it. The hero is one unbroken gradient, so
+ * the band adds no ground of its own — only a hairline to sit below and hairlines
+ * between the figures, and it carries the card's own padding out to the rounded
+ * corners.
+ */
+.hbh-stats {
+    display: grid;
+    grid-template-columns: repeat(var(--hbh-cols), minmax(0, 1fr));
+    border-top: 1px solid rgba(255, 255, 255, .13);
+}
+
+.hbh-stat { padding: 11px 20px 14px; border-left: 1px solid rgba(255, 255, 255, .13); min-width: 0; }
+.hbh-stat:first-child { border-left: none; }
+
+.hbh-stat-lbl {
+    display: flex; align-items: center; gap: 6px;
+    font-size: var(--text-hb-lbl); font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--color-hb-eyebrow);
+}
+
+.hbh-stat-val {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 3px;
+    font-size: 18px; font-weight: 750;
+    white-space: nowrap;
+}
+
+/* A currency figure is longer than a count, so it is given a size that still fits. */
+.hbh-stat-val.money { font-size: 16.5px; }
+.hbh-stat-sub { margin-top: 2px; font-size: 11px; color: rgba(255, 255, 255, .72); line-height: 1.35; }
+
+/*
+ * Dot tones, re-picked for the red ground. `r` is a light salmon rather than a
+ * red: a red dot on this gradient is a dot you cannot see.
+ */
+.hbh-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; background: #f4b3b3; }
+.hbh-dot.g { background: #7fe0a0; }
+.hbh-dot.r { background: #ffd166; }
+.hbh-dot.o { background: #ffc470; }
+.hbh-dot.b { background: #9ec9ff; }
+
+/* ── Slot content, for a screen whose own stylesheet dresses none ──────────── */
+
+.hbh .hb-chips { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+
+.hbh .hb-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 9px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 600; line-height: 1.45;
+    color: #fbe3e3;
+    background: rgba(255, 255, 255, .14);
+    border: 1px solid rgba(255, 255, 255, .2);
+}
+
+.hbh .hb-chip i { font-size: 12px; line-height: 1; }
+.hbh .hb-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #7fe0a0; }
+.hbh .hb-chip.off .dot { background: #f3a29a; }
+
+.hbh .hb-btn-white,
+.hbh .hb-btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 13px; border-radius: var(--radius-hb-ctl);
+    font-size: 12.5px; font-weight: 600;
+    white-space: nowrap; cursor: pointer;
+    border: 1px solid transparent;
+    transition: background .15s, border-color .15s;
+}
+
+.hbh .hb-btn-white { background: #fff; color: var(--color-hb-brand-3); }
+.hbh .hb-btn-white:hover { background: #fceeee; color: var(--color-hb-brand-3); }
+.hbh .hb-btn-ghost { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .28); color: #fff; }
+.hbh .hb-btn-ghost:hover { background: rgba(255, 255, 255, .22); color: #fff; }
+
+@media (max-width: 1199px) { .hbh { --hbh-cols: 3; } }
+
+@media (max-width: 767px) {
+    .hbh { --hbh-cols: 2; }
+    .hbh-gauge { flex: 1 1 100%; margin-left: 0; text-align: left; }
+    .hbh-stat { border-top: 1px solid rgba(255, 255, 255, .13); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hbh-track i,
+    .hbh .hb-btn-white,
+    .hbh .hb-btn-ghost { transition: none; }
+}

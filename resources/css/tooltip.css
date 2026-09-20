@@ -1,0 +1,48 @@
+/*
+| Tooltips — floating-vue's `hb` theme.
+|
+| The package ships positioning, flipping, shift-on-overflow and the arrow; this
+| file is only the skin, so a tooltip reads as part of Harbor rather than as the
+| library's default. Everything here hangs off .v-popper--theme-hb, which is the
+| class floating-vue puts on the popper for `v-tooltip.hb`.
+|
+| Tooltips render into <body>, outside any scoped stylesheet, so the tokens are
+| written as literals rather than var() references to sheets that are not in
+| scope there.
+*/
+.v-popper--theme-hb .v-popper__inner {
+    max-width: 260px;
+    padding: 7px 10px;
+    border-radius: 9px;
+    background: #23304d;
+    border: 1px solid rgba(255, 255, 255, .08);
+    box-shadow: 0 8px 24px rgba(20, 28, 52, .28);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    /* A tooltip may carry a figure or a sentence; both should wrap, and an
+       explicit newline in the text should be kept. */
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+.v-popper--theme-hb .v-popper__arrow-outer { border-color: #23304d; }
+.v-popper--theme-hb .v-popper__arrow-inner { visibility: hidden; }
+
+/* Enter and leave. The package toggles .v-popper__popper--shown for us. */
+.v-popper--theme-hb.v-popper__popper {
+    /* visibility rides along: the package flips it on hide, and leaving it out
+       of the transition cuts the fade-out to a jump. */
+    transition: opacity .14s ease, transform .14s ease, visibility .14s;
+}
+
+.v-popper--theme-hb.v-popper__popper--hidden { opacity: 0; transform: scale(.96); }
+.v-popper--theme-hb.v-popper__popper--shown { opacity: 1; transform: none; }
+
+/* Figures read better in the same tabular face the tables use them in. */
+.v-popper--theme-hb .v-popper__inner b,
+.v-popper--theme-hb .v-popper__inner .tip-num {
+    font-family: ui-monospace, sfmono-regular, "SF Mono", menlo, consolas, monospace;
+    font-weight: 600;
+}

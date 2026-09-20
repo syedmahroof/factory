@@ -1,0 +1,163 @@
+/*
+ * The handful of Bootstrap 4 primitives the ported Blade markup leans on.
+ *
+ * The legacy pages loaded the whole framework; the SPA does not, and the screens
+ * carry its class names because they were ported verbatim. Without these the
+ * registers break visibly: `.hb-grid` sets `min-width: 1240px` and expects
+ * `.table` for its width and `.table-responsive` for the scroll box, so the table
+ * overflows the page instead of scrolling inside its own container.
+ *
+ * Copied from public/assets/css/bootstrap.css rather than reconstructed. Only what
+ * the ported markup actually uses — this is a shim, not a framework.
+ */
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #505d69;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #eff2f7;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #eff2f7;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.d-inline-block {
+    display: inline-block !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.mr-1 {
+    margin-right: 0.25rem !important;
+}
+
+/*
+ * The grid, for the toolbars that were laid out with it.
+ *
+ * The investor transaction register's toolbar is a `row g-2` of `col-*` columns —
+ * a deliberate choice in the Blade, so the proportions can be changed by editing
+ * the markup and nothing in the stylesheet. Without the grid every column falls to
+ * full width and the toolbar becomes four stacked rows.
+ *
+ * Only the spans that markup actually asks for. Bootstrap's breakpoints: md 768px,
+ * xl 1200px.
+ */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -12px;
+    margin-left: -12px;
+}
+
+.row > * {
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+    padding-right: 12px;
+    padding-left: 12px;
+}
+
+.row.g-2 {
+    margin: -4px;
+}
+
+.row.g-2 > * {
+    padding: 4px;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.col-12 { flex: 0 0 auto; width: 100%; }
+.col-6 { flex: 0 0 auto; width: 50%; }
+
+@media (min-width: 768px) {
+    .col-md-4 { flex: 0 0 auto; width: 33.333333%; }
+    .col-md-6 { flex: 0 0 auto; width: 50%; }
+    .col-md-8 { flex: 0 0 auto; width: 66.666667%; }
+}
+
+@media (min-width: 1200px) {
+    .col-xl-3 { flex: 0 0 auto; width: 25%; }
+    .col-xl-4 { flex: 0 0 auto; width: 33.333333%; }
+    .col-xl-auto { flex: 0 0 auto; width: auto; }
+}
+
+/*
+ * Pagination.
+ *
+ * Every register's footer is Laravel's own pager markup — `ul.pagination` of
+ * `li.page-item > .page-link` — and each screen's stylesheet dresses the links
+ * (colour, border, the active pill) while assuming Bootstrap supplies the list
+ * itself. Without that the pager renders as a bulleted vertical list.
+ *
+ * The screens carry `!important` on their own border-radius, so nothing here
+ * needs to fight them; this is only the list, the reset, and the control shape a
+ * <button> needs to pass for a link.
+ */
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.page-item {
+    display: block;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    color: #cc1f1f;
+    font: inherit;
+    line-height: 1.25;
+    padding: 6px 12px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.page-link:hover {
+    background: #f7f8fb;
+}
+
+.page-item.disabled .page-link {
+    cursor: default;
+    pointer-events: none;
+}
+
+/*
+ * The responsive display utilities the merchant tab bar uses: below md a pill
+ * shows only its icon, so eleven of them still fit on a phone.
+ */
+.d-none { display: none; }
+
+@media (min-width: 768px) {
+    .d-md-inline-block { display: inline-block; }
+}

@@ -1,0 +1,359 @@
+/*
+| ERP surface — the shared class names the Factory ERP screens were built on,
+| redrawn in the Harbor tokens from app.css.
+|
+| The ~60 ERP pages (sales, procurement, quality, finance, HR, …) carry a small,
+| fixed vocabulary of class names between them: `.card`, `.btn*`, `.data-table`,
+| plus bare <input>/<select>/<textarea>. They were dressed by a hand-written
+| approximation of ip_new's theme. This file dresses that same vocabulary from
+| the real thing instead, so the pages inherit the exact design without 60 files
+| being rewritten.
+|
+| Measurements are lifted from the ip_new screens rather than chosen:
+|   sheet      #fff, 16px radius, 0 10px 32px rgba(20,28,52,.10)  (hb-sheet)
+|   grid head  10.5px / 750 / .09em, uppercase, hb-mut, 9px 10px  (hb-grid thead th)
+|   grid cell  13.5px, 8px 10px, border-top hb-row, hover hb-hover
+|   control    #fff, 1px hb-line, 9px radius, 8px 12px, focus brand + 3px ring
+|   button     10px radius, 13px / 650                            (hb-btn-white / hb-tool)
+|
+| `@layer components` so a page's own utility classes still win.
+*/
+
+@layer components {
+    /* ---- Sheet ------------------------------------------------------------ */
+    .card {
+        background: #fff;
+        border-radius: var(--radius-hb-sheet);
+        box-shadow: var(--shadow-hb-sheet);
+        margin-bottom: 16px;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--color-hb-line);
+    }
+
+    .card-header:empty { display: none; }
+    .card-header:last-child { border-bottom: 0; border-top: 1px solid var(--color-hb-line); }
+    .card-body { padding: 16px 18px 20px; }
+
+    /* ---- Grid ------------------------------------------------------------- */
+    .data-table {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: collapse;
+        text-align: left;
+        color: var(--color-hb-ink);
+    }
+
+    .data-table thead th {
+        font-size: var(--text-hb-lbl);
+        font-weight: 750;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        color: var(--color-hb-mut);
+        border-top: 0;
+        border-bottom: 1px solid #eee9ea;
+        padding: 9px 10px;
+        white-space: nowrap;
+        user-select: none;
+    }
+
+    .data-table td {
+        padding: 8px 10px;
+        border-top: 1px solid var(--color-hb-row);
+        border-bottom: 0;
+        vertical-align: middle;
+        font-size: var(--text-hb-body);
+    }
+
+    .data-table tbody tr:first-child td { border-top: 0; }
+    .data-table tbody tr:hover td { background: var(--color-hb-hover); }
+    .data-table .text-right { text-align: right; }
+
+    /* Numbers line up only with tabular figures. */
+    .data-table .num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+    }
+
+    /* ---- Buttons ---------------------------------------------------------- */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border: 1px solid transparent;
+        border-radius: var(--radius-hb-btn);
+        padding: 8px 15px;
+        font-size: 13px;
+        font-weight: 650;
+        line-height: 1.25;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: background-color .15s, border-color .15s, color .15s;
+    }
+
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+    .btn:focus-visible { outline: none; box-shadow: var(--shadow-hb-focus); }
+
+    .btn-primary {
+        background: var(--color-hb-brand);
+        border-color: var(--color-hb-brand);
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background: var(--color-hb-brand-2);
+        border-color: var(--color-hb-brand-2);
+    }
+
+    /* The toolbar button: white, outlined, its hue arriving only on hover. */
+    .btn-secondary {
+        background: #fff;
+        border-color: var(--color-hb-line);
+        color: var(--color-hb-ink);
+    }
+
+    .btn-secondary:hover { border-color: var(--color-hb-brand); }
+
+    .btn-success {
+        background: #fff;
+        border-color: var(--color-hb-line);
+        color: var(--color-hb-green);
+    }
+
+    .btn-success:hover { border-color: var(--color-hb-green); background: #f2f9f4; }
+
+    .btn-danger {
+        background: #fff;
+        border-color: var(--color-hb-line);
+        color: var(--color-hb-red);
+    }
+
+    .btn-danger:hover { border-color: var(--color-hb-red); background: #fdf4f3; }
+
+    .btn-outline {
+        background: transparent;
+        border-color: var(--color-hb-brand);
+        color: var(--color-hb-brand);
+    }
+
+    .btn-outline:hover { background: var(--color-hb-brand); color: #fff; }
+
+    .btn-sm { padding: 5px 10px; font-size: var(--text-hb-sm); }
+    .btn-block { display: flex; width: 100%; }
+
+    /* ---- Row actions ------------------------------------------------------ */
+    .btn-icon {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border-radius: 50%;
+        background: #fff;
+        border: 1px solid var(--color-hb-line);
+        color: #5c565e;
+        font-size: 13px;
+    }
+
+    .btn-icon:hover { border-color: var(--color-hb-brand); color: var(--color-hb-brand); }
+
+    /* ---- Pills ------------------------------------------------------------ */
+    .hb-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 3px 10px;
+        font-size: var(--text-hb-sm);
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .hb-pill.ok { background: #e9f5df; color: #4c8a2f; }
+    .hb-pill.off { background: #fbe9e6; color: #c0392b; }
+    .hb-pill.done { background: #e7f1fb; color: #2f6ea8; }
+    .hb-pill.idle { background: #f3f0e6; color: #8a6d2f; }
+    .hb-pill.neutral { background: #f6f4f5; color: #585460; }
+
+    /*
+     * Sortable headings. The arrow is held at low opacity until the column is the
+     * one being sorted, so a row of headings does not read as a row of arrows —
+     * but it is always there, which is what tells you the column can be sorted.
+     */
+    .data-table thead th.is-sortable {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .data-table thead th.is-sortable:hover { color: var(--color-hb-ink); }
+
+    .data-table thead th .dt-sort {
+        margin-left: 4px;
+        font-size: 13px;
+        vertical-align: -1px;
+        opacity: .35;
+    }
+
+    .data-table thead th.is-sortable:hover .dt-sort { opacity: .7; }
+    .data-table thead th .dt-sort.is-on { opacity: 1; color: var(--color-hb-brand); }
+
+    /* ---- Field label ------------------------------------------------------ */
+    .hb-lbl {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 5px;
+        font-size: var(--text-hb-lbl);
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: var(--color-hb-mut);
+    }
+}
+
+/*
+| Controls, styled on the element rather than a class: the ERP pages write bare
+| <input>/<select>/<textarea> and reach for Tailwind utilities case by case, so
+| there is no class to hang this on. Low specificity on purpose — a utility on
+| the element still wins, and the ip_new screens dress their own controls from
+| inside `.harbor.hb-s-*`, which is unlayered and outranks this.
+*/
+@layer base {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+    select,
+    textarea {
+        width: 100%;
+        background: #fff;
+        border: 1px solid var(--color-hb-line);
+        border-radius: var(--radius-hb-ctl);
+        padding: 8px 12px;
+        font-size: var(--text-hb-body);
+        font-weight: 600;
+        color: var(--color-hb-ink);
+    }
+
+    select { cursor: pointer; }
+    textarea { font-weight: 500; line-height: 1.55; }
+
+    input::placeholder,
+    textarea::placeholder {
+        font-weight: 400;
+        color: color-mix(in srgb, var(--color-hb-mut) 60%, transparent);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: var(--color-hb-brand);
+        box-shadow: var(--shadow-hb-focus);
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+        width: 15px;
+        height: 15px;
+        accent-color: var(--color-hb-brand);
+        cursor: pointer;
+    }
+}
+
+/*
+| The pager. bootstrap-compat.css supplies the list and the link; the register
+| stylesheets dress the pill themselves, so the ERP pager is dressed here to the
+| same measurements (8px radius, 6px gutter, brand fill when current).
+*/
+.pagination { gap: 0; }
+
+.page-link {
+    border: 1px solid var(--color-hb-line);
+    border-radius: 8px !important;
+    margin-left: 6px;
+    padding: 5px 10px;
+    min-width: 32px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--color-hb-ink);
+}
+
+.page-item.active .page-link {
+    background: var(--color-hb-brand);
+    border-color: var(--color-hb-brand);
+    color: #fff;
+}
+
+.page-item.disabled .page-link { color: #cbc5c8; }
+
+/*
+| The page toolbar, which the layout pulls up onto the brand title band.
+|
+| ip_new puts a screen's primary action inside its title panel and dresses it as
+| `.hb-btn-white` — a white pill, because a brand-filled button on a brand-filled
+| band is a shape you have to hunt for. The ERP toolbar lands in the same place,
+| so it inherits the same treatment rather than a second red on red.
+*/
+.page-toolbar .btn-primary {
+    background: #fff;
+    border-color: #fff;
+    color: var(--color-hb-ink);
+}
+
+.page-toolbar .btn-primary:hover {
+    background: #fceeee;
+    border-color: #fceeee;
+    color: var(--color-hb-ink);
+}
+
+.page-toolbar .btn-secondary,
+.page-toolbar .btn-success,
+.page-toolbar .btn-danger {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #fff;
+}
+
+.page-toolbar .btn-secondary:hover,
+.page-toolbar .btn-success:hover,
+.page-toolbar .btn-danger:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #fff;
+}
+
+/*
+| The compact control, for grids of them — the line editor puts one in every cell,
+| where the 8px/12px padding of a standalone field would double the row height.
+*/
+@layer components {
+    .hb-input-sm {
+        width: 100%;
+        background: #fff;
+        border: 1px solid var(--color-hb-line);
+        border-radius: 7px;
+        padding: 5px 8px;
+        font-size: var(--text-hb-sm);
+        font-weight: 600;
+        color: var(--color-hb-ink);
+    }
+
+    .hb-input-sm:focus {
+        outline: none;
+        border-color: var(--color-hb-brand);
+        box-shadow: var(--shadow-hb-focus);
+    }
+}
+
+/* Row actions sit in a row; the danger variant colours only on hover. */
+.btn-icon + .btn-icon,
+.btn-icon + .btn,
+.btn + .btn-icon { margin-left: 6px; }
+
+.btn-icon.danger:hover { border-color: var(--color-hb-red); color: var(--color-hb-red); }
+.btn-icon.ok:hover { border-color: var(--color-hb-green); color: var(--color-hb-green); }

@@ -1,0 +1,23 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.1.16",
+        "laravel-vite-plugin": "^2.0.1",
+        "tailwindcss": "^4.1.16",
+        "vite": "^7.1.12"
+    },
+    "dependencies": {
+        "@vitejs/plugin-vue": "^6.0.8",
+        "axios": "^1.13.2",
+        "floating-vue": "^5.2.2",
+        "pinia": "^2.3.1",
+        "vue": "^3.5.42",
+        "vue-router": "^4.6.4"
+    }
+}

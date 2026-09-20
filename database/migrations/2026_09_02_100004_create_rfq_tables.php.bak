@@ -1,0 +1,38 @@
+<?php
+use Illuminate\Database\Migrations\Migration;
+return new class extends Migration {
+    public function up(): void {
+        Schema::create('request_for_quotations', function ($t) {
+            $t->id(); $t->uuid('uuid');
+            $t->string('number', 30)->unique();
+            $t->foreignId('requisition_id')->nullable()->constrained('purchase_requisitions');
+            $t->foreignId('created_by')->constrained('users');
+            $t->date('issue_date');
+            $t->date('response_deadline');
+            $t->enum('status', ['draft', 'sent', 'received', 'evaluated', 'awarded', 'cancelled'])->default('draft');
+            $t->timestamps();
+        });
+        Schema::create('rfq_lines', function ($t) {
+            $t->id();
+            $t->foreignId('rfq_id')->constrained('request_for_quotations')->cascadeOnDelete();
+            $t->foreignId('item_id')->constrained();
+            $t->decimal('quantity', 12, 4);
+            $t->foreignId('uom_id')->constrained('uoms');
+            $t->timestamps();
+        });
+        Schema::create('rfq_responses', function ($t) {
+            $t->id();
+            $t->foreignId('rfq_id')->constrained('request_for_quotations')->cascadeOnDelete();
+            $t->foreignId('supplier_id')->constrained();
+            $t->decimal('unit_price', 12, 2);
+            $t->decimal('tax_rate', 5, 2)->nullable();
+            $t->decimal('freight_cost', 12, 2)->nullable();
+            $t->integer('lead_time_days')->nullable();
+            $t->text('notes')->nullable();
+            $t->enum('status', ['received', 'shortlisted', 'awarded', 'rejected'])->default('received');
+            $t->timestamps();
+        });
+    }
+    public function down(): void {
+    }
+};

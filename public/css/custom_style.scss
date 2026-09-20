@@ -1,0 +1,74 @@
+.page-title-box {
+    padding: 0 12px 65px 12px;
+}
+.page-title-box {
+    padding: 0 12px 55px 12px;
+}
+.card-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+.menu-title {
+    display: none !important;
+}
+.media-body h4 {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+.media-body p {
+    margin: 0 0 10px;
+}
+.navbar-header,
+.header-item {
+    height: 50px;
+}
+.page-content {
+    padding: 50px calc(24px / 2) 60px calc(24px / 2);
+}
+#vertical-menu-btn {
+    margin: 0;
+    padding: 0px;
+    height: 50px;
+}
+.navbar-brand-box {
+    background: #0f0730 !important;
+    .logo-lg {
+        display: inline-block;
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+    .logo {
+        line-height: 50px;
+    }
+}
+.vertical-menu {
+    top: 50px;
+}
+.metismenu li svg {
+    position: relative;
+    top: -3px;
+}
+.dash-card-body {
+    .card-body {
+        .media {
+            align-items: center;
+        }
+        p {
+            margin: 0;
+            font-weight: 700;
+            font-size: 22px;
+        }
+        h5 {
+            font-size: 14px;
+        }
+    }
+}
+/* A hairline instead of the soft drop shadow — the shadow casts downward, so
+   the sidebar had no real edge against the page content. */
+.vertical-menu {
+    border-right: 1px solid #e7eaf0;
+    box-shadow: none;
+}

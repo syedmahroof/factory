@@ -1,0 +1,315 @@
+/*
+| The create/edit screen.
+|
+| Ported from ip_new's resources/css/legacy/account-form.css — the same numbered
+| sections, the same two-column field rows, the same inputs with a leading glyph
+| and a message line that holds its space so the form never jumps when an error
+| appears, and the same sticky preview column.
+|
+| What is not carried over is its palette. Every colour and radius reads from the
+| tokens in app.css, so this follows the brand rather than keeping a second copy
+| of it, and the class names are `rf-*` rather than the `hb-*` set — `.hb-chip`
+| and `.hb-pill` already mean something else here, in hb-hero.css and
+| erp-surface.css, and a form is not the place to redefine them.
+*/
+
+.rf {
+    --rf-ln2: #f0ecee;
+    --rf-pn2: #fbf9fa;
+    color: var(--color-hb-ink);
+}
+
+/* ── The sheet ───────────────────────────────────────────────────────────── */
+
+.rf .rf-sheet {
+    margin-top: 14px;
+    padding: 18px 20px 16px;
+    border-radius: var(--radius-hb-sheet);
+    background: #fff;
+    box-shadow: var(--shadow-hb-sheet);
+}
+
+.rf .rf-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 22px;
+}
+
+@media (max-width: 991px) {
+    .rf .rf-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Sections ────────────────────────────────────────────────────────────── */
+
+.rf .rf-sect { padding: 2px 0 13px; }
+.rf .rf-sect + .rf-sect { border-top: 1px solid var(--rf-ln2); padding-top: 13px; }
+
+.rf .rf-sect-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 9px;
+    flex-wrap: wrap;
+}
+
+/* The number is the only coloured thing in the heading, so the eye counts them. */
+.rf .rf-no {
+    font-size: var(--text-hb-lbl);
+    font-weight: 750;
+    letter-spacing: .1em;
+    color: var(--color-hb-brand);
+}
+
+.rf .rf-sect-head h2 { margin: 0; font-size: 13.5px; font-weight: 700; }
+.rf .rf-hint { color: var(--color-hb-mut); font-size: var(--text-hb-sm); }
+
+/* ── Fields ──────────────────────────────────────────────────────────────── */
+
+.rf .rf-frow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 14px;
+}
+
+@media (max-width: 640px) {
+    .rf .rf-frow { grid-template-columns: 1fr; }
+}
+
+/* A field that needs the room takes the whole row. */
+.rf .rf-fg.wide { grid-column: 1 / -1; }
+
+.rf .rf-fg {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.rf .rf-fg > label {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--color-hb-mut);
+}
+
+.rf .rf-req { color: var(--color-hb-red); }
+
+.rf .rf-in { position: relative; }
+
+.rf .rf-in .lead {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a39ba0;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+/* The control is dressed here rather than by the global element styles, because
+   it has to leave room for the glyph on its left. */
+.rf .rf-in input,
+.rf .rf-in select,
+.rf .rf-in textarea {
+    width: 100%;
+    padding: 8px 10px 8px 32px;
+    border: 1px solid var(--color-hb-line);
+    border-radius: var(--radius-hb-ctl);
+    background: #fff;
+    font-size: var(--text-hb-body);
+    font-weight: 600;
+    color: var(--color-hb-ink);
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.rf .rf-in textarea {
+    padding-top: 9px;
+    line-height: 1.55;
+    font-weight: 500;
+    resize: vertical;
+}
+
+/* The glyph beside a textarea belongs at the first line, not halfway down it. */
+.rf .rf-in.is-area .lead { top: 15px; transform: none; }
+
+.rf .rf-in input::placeholder,
+.rf .rf-in textarea::placeholder {
+    font-weight: 400;
+    color: color-mix(in srgb, var(--color-hb-mut) 65%, transparent);
+}
+
+.rf .rf-in input:focus,
+.rf .rf-in select:focus,
+.rf .rf-in textarea:focus {
+    outline: none;
+    border-color: var(--color-hb-brand);
+    box-shadow: var(--shadow-hb-focus);
+}
+
+.rf .rf-in.err input,
+.rf .rf-in.err select,
+.rf .rf-in.err textarea {
+    border-color: var(--color-hb-red);
+    box-shadow: 0 0 0 3px rgba(214, 60, 46, .10);
+}
+
+/* A select draws its own caret, since `appearance: none` removed the native one. */
+.rf .rf-in.is-select::after {
+    content: "▾";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a39ba0;
+    font-size: 10px;
+    pointer-events: none;
+}
+
+/* A boolean is a switch-shaped row, not an input with a glyph. */
+.rf .rf-check {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border: 1px solid var(--color-hb-line);
+    border-radius: var(--radius-hb-ctl);
+    background: #fff;
+    font-size: var(--text-hb-body);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rf .rf-check:hover { border-color: var(--color-hb-brand); }
+
+/*
+ * The message line keeps its height whether or not it has anything to say, so a
+ * validation error appearing does not shove every field below it down the page.
+ */
+.rf .rf-msg {
+    min-height: 13px;
+    font-size: 11.5px;
+    color: var(--color-hb-mut);
+}
+
+.rf .rf-msg.err { color: var(--color-hb-red); }
+
+/* ── The preview column ──────────────────────────────────────────────────── */
+
+.rf .rf-aside {
+    border-left: 1px solid var(--rf-ln2);
+    padding-left: 22px;
+}
+
+/* It follows the scroll; the topbar is 70px tall. */
+.rf .rf-stick { position: sticky; top: 86px; }
+
+@media (max-width: 991px) {
+    .rf .rf-aside { border-left: none; padding-left: 0; border-top: 1px solid var(--rf-ln2); padding-top: 16px; }
+    .rf .rf-stick { position: static; }
+}
+
+.rf .rf-cap {
+    margin-bottom: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: var(--color-hb-mut);
+}
+
+.rf .rf-preview {
+    padding: 13px;
+    border: 1px solid var(--rf-ln2);
+    border-radius: var(--radius-hb-panel);
+    background: var(--rf-pn2);
+}
+
+.rf .rf-pv-top { display: flex; align-items: center; gap: 10px; }
+
+.rf .rf-pv-av {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #fceeee;
+    color: var(--color-hb-brand);
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.rf .rf-pv-nm { font-size: 14px; font-weight: 750; overflow-wrap: anywhere; }
+.rf .rf-pv-em { font-size: var(--text-hb-sm); color: var(--color-hb-mut); overflow-wrap: anywhere; }
+
+.rf .rf-pv-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+
+.rf .rf-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border: 1px solid var(--color-hb-line);
+    border-radius: 999px;
+    background: #f6f4f5;
+    font-size: var(--text-hb-sm);
+    font-weight: 650;
+    color: #585460;
+}
+
+.rf .rf-pv-note {
+    margin-top: 10px;
+    font-size: var(--text-hb-sm);
+    line-height: 1.5;
+    color: var(--color-hb-mut);
+}
+
+/* ── The footer ──────────────────────────────────────────────────────────── */
+
+.rf .rf-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid var(--rf-ln2);
+    padding-top: 13px;
+}
+
+.rf .rf-foot .spacer { margin-left: auto; }
+
+.rf .rf-save {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: var(--radius-hb-ctl);
+    background: var(--color-hb-brand);
+    font-size: var(--text-hb-body);
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+}
+
+.rf .rf-save:hover { background: var(--color-hb-brand-2); }
+.rf .rf-save:disabled { opacity: .6; cursor: not-allowed; }
+
+.rf .rf-plain {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--color-hb-line);
+    border-radius: var(--radius-hb-ctl);
+    background: #fff;
+    font-size: var(--text-hb-body);
+    font-weight: 600;
+    color: #5c565e;
+    cursor: pointer;
+}
+
+.rf .rf-plain:hover { border-color: var(--color-hb-brand); color: var(--color-hb-brand); }
