@@ -13,16 +13,18 @@ return new class extends Migration {
             $t->index(['parent_serial_number']);
             $t->index(['child_serial_number']);
         });
-        Schema::create('stock_statuses', function ($t) {
-            $t->id(); $t->string('name')->unique();
-            $t->string('code', 20)->unique();
-            $t->string('color', 20)->nullable();
-            $t->boolean('available_for_issue')->default(false);
-            $t->boolean('available_for_production')->default(false);
-            $t->boolean('available_for_sale')->default(false);
-            $t->boolean('available_for_mrp')->default(false);
-            $t->timestamps();
-        });
+        if (! Schema::hasTable('stock_statuses')) {
+            Schema::create('stock_statuses', function ($t) {
+                $t->id(); $t->string('name')->unique();
+                $t->string('code', 20)->unique();
+                $t->string('color', 20)->nullable();
+                $t->boolean('available_for_issue')->default(false);
+                $t->boolean('available_for_production')->default(false);
+                $t->boolean('available_for_sale')->default(false);
+                $t->boolean('available_for_mrp')->default(false);
+                $t->timestamps();
+            });
+        }
         Schema::create('cycle_counts', function ($t) {
             $t->id(); $t->uuid('uuid');
             $t->string('number', 30)->unique();

@@ -52,30 +52,34 @@ return new class extends Migration {
             $t->enum('status', ['calibrated', 'due', 'overdue', 'out_of_service'])->default('calibrated');
             $t->timestamps();
         });
-        Schema::create('complaints', function ($t) {
-            $t->id(); $t->uuid('uuid');
-            $t->string('number', 30)->unique();
-            $t->foreignId('customer_id')->nullable();
-            $t->foreignId('item_id')->nullable()->constrained();
-            $t->text('description');
-            $t->text('investigation')->nullable();
-            $t->text('corrective_action')->nullable();
-            $t->foreignId('handled_by')->nullable()->constrained('users');
-            $t->enum('severity', ['low', 'medium', 'high', 'critical']);
-            $t->enum('status', ['open', 'investigating', 'resolved', 'closed'])->default('open');
-            $t->timestamps();
-        });
-        Schema::create('recalls', function ($t) {
-            $t->id(); $t->uuid('uuid');
-            $t->string('number', 30)->unique();
-            $t->text('reason');
-            $t->foreignId('item_id')->nullable()->constrained();
-            $t->json('affected_batches')->nullable();
-            $t->json('affected_customers')->nullable();
-            $t->foreignId('initiated_by')->constrained('users');
-            $t->enum('status', ['initiated', 'in_progress', 'completed'])->default('initiated');
-            $t->timestamps();
-        });
+        if (! Schema::hasTable('complaints')) {
+            Schema::create('complaints', function ($t) {
+                $t->id(); $t->uuid('uuid');
+                $t->string('number', 30)->unique();
+                $t->foreignId('customer_id')->nullable();
+                $t->foreignId('item_id')->nullable()->constrained();
+                $t->text('description');
+                $t->text('investigation')->nullable();
+                $t->text('corrective_action')->nullable();
+                $t->foreignId('handled_by')->nullable()->constrained('users');
+                $t->enum('severity', ['low', 'medium', 'high', 'critical']);
+                $t->enum('status', ['open', 'investigating', 'resolved', 'closed'])->default('open');
+                $t->timestamps();
+            });
+        }
+        if (! Schema::hasTable('recalls')) {
+            Schema::create('recalls', function ($t) {
+                $t->id(); $t->uuid('uuid');
+                $t->string('number', 30)->unique();
+                $t->text('reason');
+                $t->foreignId('item_id')->nullable()->constrained();
+                $t->json('affected_batches')->nullable();
+                $t->json('affected_customers')->nullable();
+                $t->foreignId('initiated_by')->constrained('users');
+                $t->enum('status', ['initiated', 'in_progress', 'completed'])->default('initiated');
+                $t->timestamps();
+            });
+        }
     }
     public function down(): void {
     }

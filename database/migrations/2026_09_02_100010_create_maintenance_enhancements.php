@@ -23,16 +23,18 @@ return new class extends Migration {
             $t->integer('reorder_point')->default(0);
             $t->timestamps();
         });
-        Schema::create('meter_readings', function ($t) {
-            $t->id();
-            $t->foreignId('asset_id')->constrained();
-            $t->string('meter_name');
-            $t->decimal('reading_value', 12, 2);
-            $t->datetime('reading_date');
-            $t->foreignId('recorded_by')->nullable()->constrained('users');
-            $t->enum('source', ['manual', 'api', 'iot']);
-            $t->timestamps();
-        });
+        if (! Schema::hasTable('meter_readings')) {
+            Schema::create('meter_readings', function ($t) {
+                $t->id();
+                $t->foreignId('asset_id')->constrained();
+                $t->string('meter_name');
+                $t->decimal('reading_value', 12, 2);
+                $t->datetime('reading_date');
+                $t->foreignId('recorded_by')->nullable()->constrained('users');
+                $t->enum('source', ['manual', 'api', 'iot']);
+                $t->timestamps();
+            });
+        }
         Schema::create('tool_registrations', function ($t) {
             $t->id(); $t->uuid('uuid');
             $t->string('code', 50)->unique();

@@ -12,17 +12,19 @@ return new class extends Migration {
             $t->boolean('is_active')->default(true);
             $t->timestamps();
         });
-        Schema::create('notifications', function ($t) {
-            $t->id(); $t->uuid('uuid');
-            $t->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $t->string('type');
-            $t->string('title');
-            $t->text('message');
-            $t->string('url')->nullable();
-            $t->boolean('is_read')->default(false);
-            $t->datetime('read_at')->nullable();
-            $t->timestamps();
-        });
+        if (! Schema::hasTable('notifications')) {
+            Schema::create('notifications', function ($t) {
+                $t->id(); $t->uuid('uuid');
+                $t->foreignId('user_id')->constrained()->cascadeOnDelete();
+                $t->string('type');
+                $t->string('title');
+                $t->text('message');
+                $t->string('url')->nullable();
+                $t->boolean('is_read')->default(false);
+                $t->datetime('read_at')->nullable();
+                $t->timestamps();
+            });
+        }
         Schema::create('tasks', function ($t) {
             $t->id(); $t->uuid('uuid');
             $t->string('title');
@@ -36,14 +38,16 @@ return new class extends Migration {
             $t->enum('priority', ['low', 'medium', 'high', 'urgent'])->default('medium');
             $t->timestamps();
         });
-        Schema::create('comments', function ($t) {
-            $t->id();
-            $t->string('commentable_type');
-            $t->unsignedBigInteger('commentable_id');
-            $t->foreignId('user_id')->constrained();
-            $t->text('body');
-            $t->timestamps();
-        });
+        if (! Schema::hasTable('comments')) {
+            Schema::create('comments', function ($t) {
+                $t->id();
+                $t->string('commentable_type');
+                $t->unsignedBigInteger('commentable_id');
+                $t->foreignId('user_id')->constrained();
+                $t->text('body');
+                $t->timestamps();
+            });
+        }
         Schema::create('document_templates', function ($t) {
             $t->id();
             $t->string('name');

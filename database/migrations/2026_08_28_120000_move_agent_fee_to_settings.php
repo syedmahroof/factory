@@ -13,6 +13,11 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Installs without the legacy advance tables have no fee to move.
+        if (! Schema::hasTable('merchants')) {
+            return;
+        }
+
         Schema::table('merchants', function (Blueprint $table) {
             $table->decimal('agent_fee_percentage', 4, 2)->nullable()->default(null)->change();
             $table->decimal('management_fee_percentage', 4, 2)->nullable()->default(null)->change();
@@ -42,6 +47,10 @@ return new class extends Migration
 
     public function down(): void
     {
+        if (! Schema::hasTable('merchants')) {
+            return;
+        }
+
         Schema::table('merchants', function (Blueprint $table) {
             $table->decimal('agent_fee_percentage', 4, 2)->default(0)->change();
             $table->decimal('management_fee_percentage', 4, 2)->default(0)->change();

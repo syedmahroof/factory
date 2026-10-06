@@ -29,19 +29,21 @@ return new class extends Migration {
             $t->decimal('total_cost', 14, 4)->default(0);
             $t->timestamps();
         });
-        Schema::create('rework_orders', function ($t) {
-            $t->id(); $t->uuid('uuid');
-            $t->string('number', 30)->unique();
-            $t->foreignId('production_order_id')->constrained();
-            $t->foreignId('ncr_id')->nullable();
-            $t->foreignId('item_id')->constrained();
-            $t->decimal('quantity', 12, 4);
-            $t->text('reason');
-            $t->text('disposition')->nullable();
-            $t->decimal('rework_cost', 14, 4)->nullable();
-            $t->enum('status', ['open', 'in_progress', 'completed', 'cancelled'])->default('open');
-            $t->timestamps();
-        });
+        if (! Schema::hasTable('rework_orders')) {
+            Schema::create('rework_orders', function ($t) {
+                $t->id(); $t->uuid('uuid');
+                $t->string('number', 30)->unique();
+                $t->foreignId('production_order_id')->constrained();
+                $t->foreignId('ncr_id')->nullable();
+                $t->foreignId('item_id')->constrained();
+                $t->decimal('quantity', 12, 4);
+                $t->text('reason');
+                $t->text('disposition')->nullable();
+                $t->decimal('rework_cost', 14, 4)->nullable();
+                $t->enum('status', ['open', 'in_progress', 'completed', 'cancelled'])->default('open');
+                $t->timestamps();
+            });
+        }
         Schema::create('scrap_records', function ($t) {
             $t->id();
             $t->foreignId('production_order_id')->constrained();

@@ -49,6 +49,11 @@ return new class extends Migration
             $table->softDeletes();
         });
 
+        // Installs without the legacy advance tables have no splits to stamp.
+        if (! Schema::hasTable('merchant_payment_investors')) {
+            return;
+        }
+
         Schema::table('merchant_payment_investors', function (Blueprint $table) {
             // Which payout covered this split. Null means undistributed, which is
             // what a run looks for.
@@ -58,9 +63,11 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('merchant_payment_investors', function (Blueprint $table) {
-            $table->dropColumn('syndication_payment_id');
-        });
+        if (Schema::hasColumn('merchant_payment_investors', 'syndication_payment_id')) {
+            Schema::table('merchant_payment_investors', function (Blueprint $table) {
+                $table->dropColumn('syndication_payment_id');
+            });
+        }
 
         Schema::dropIfExists('syndication_payments');
     }

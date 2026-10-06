@@ -2,6 +2,8 @@
 use Illuminate\Database\Migrations\Migration;
 return new class extends Migration {
     public function up(): void {
+        // Replaces the per-charge layout from the procurement migration, which nothing reads.
+        Schema::dropIfExists('landed_costs');
         Schema::create('landed_costs', function ($t) {
             $t->id(); $t->uuid('uuid');
             $t->foreignId('goods_receipt_id')->constrained();
